@@ -11,18 +11,34 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji" rel="stylesheet">
-</head>
-<body>
     <style>
+        /* Catppuccin Palette */
+        :root {
+            --bg-color: #1e1e2e; /* Mocha background */
+            --text-color: #cdd6f4; /* Mocha text */
+            --card-bg-color: #313244; /* Mocha surface */
+            --accent-color: #f38ba8; /* Mocha red */
+            --overlay-color: #11111b; /* Dark theme overlay color */
+            --overlay-opacity: 0.7; /* Overlay opacity */
+        }
+        [data-theme="latte"] {
+            --bg-color: #eff1f5; /* Latte background */
+            --text-color: #4c4f69; /* Latte text */
+            --card-bg-color: #e6e9ef; /* Latte surface */
+            --accent-color: #d20f39; /* Latte red */
+            --overlay-color: #dce0e8; /* Light theme overlay color */
+        }
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #11111b;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         .emoji {
             font-family: 'Noto Color Emoji', sans-serif;
         }
         p, a, strong {
-            color: #cdd6f4;
+            color: var(--text-color);
         }
         strong {
             font-size: 5.4rem;
@@ -34,9 +50,49 @@
         p {
             font-size: 1.2rem;
         }
+        .card {
+            background-color: var(--card-bg-color);
+            width: 90%; /* Make the card take up 90% of its container */
+            margin: auto; /* Center the card horizontally */
+            overflow: hidden; /* Ensure no overflow from the image */
+            position: relative; /* Needed for absolute positioning of overlay */
+            height: auto; /* Allow height to adjust dynamically */
+            border-radius: 20px; /* Keep the rounder look */
+        }
+        .card-img {
+            width: 100%; /* Make the image span the full width of the card */
+            height: auto; /* Allow height to adjust based on image aspect ratio */
+            object-fit: contain; /* Ensure the entire image is visible */
+            filter: brightness(var(--image-brightness)); /* Adjust brightness based on theme */
+            transition: filter 0.3s ease; /* Smooth transition for brightness changes */
+        }
+        .card::before {
+            content: ''; /* Required for pseudo-element */
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--overlay-color); /* Overlay color */
+            opacity: var(--overlay-opacity); /* Overlay opacity */
+            z-index: 1; /* Place overlay above the image */
+            pointer-events: none; /* Ensure the overlay doesn't block interactions */
+        }
+        .card-img-overlay {
+            position: absolute; /* Position the overlay absolutely within the card */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2; /* Place text above the overlay */
+        }
         @media (min-width: 1200px) {
             strong {
-                font-size: 6.48rem; /* Tamaño de fuente mayor para pantallas grandes */
+                font-size: 6.48rem; /* Larger font size for larger screens */
             }
             p {
                 font-size: 1.44rem;
@@ -44,12 +100,38 @@
             a {
                 font-size: 3.24rem;
             }
+            .card {
+                max-width: 600px; /* Set a maximum width for desktop */
+                height: auto; /* Allow height to adjust dynamically */
+            }
+        }
+        /* Theme switch button styles */
+        .theme-switch {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            cursor: pointer;
+            background-color: var(--card-bg-color);
+            color: var(--text-color);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px; /* Keep the rounder look */
+            font-size: 1.2rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .theme-switch:hover {
+            opacity: 0.7;
         }
     </style>
+</head>
+<body>
+    <!-- Theme Switch Button -->
+    <button class="theme-switch" id="themeSwitch">🌙</button>
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="row justify-content-center align-items-center">
-            <div class="col-12 col-md-5">
-                <div class="card text-bg-dark text-center">
+            <div class="col-12">
+                <div class="card text-center">
                     <img src="image.webp" class="card-img" alt="Shiro">
                     <div class="card-img-overlay d-flex flex-column justify-content-center">
                         <h1 class="card-title"><strong>Shiro</strong></h1>
@@ -78,5 +160,33 @@
             </div>
         </div>
     </div>
+    <script>
+        // Theme Switch Logic
+        const themeSwitch = document.getElementById('themeSwitch');
+
+        // Check if a theme is saved in localStorage, default to 'mocha' if not set
+        const currentTheme = localStorage.getItem('theme') || 'mocha'; // Default to 'mocha'
+        if (currentTheme === 'latte') {
+            document.documentElement.setAttribute('data-theme', 'latte');
+            themeSwitch.textContent = '☀️'; // Light mode icon
+        } else {
+            document.documentElement.setAttribute('data-theme', 'mocha');
+            themeSwitch.textContent = '🌙'; // Dark mode icon
+        }
+
+        // Toggle theme on button click
+        themeSwitch.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'mocha') {
+                document.documentElement.setAttribute('data-theme', 'latte');
+                localStorage.setItem('theme', 'latte');
+                themeSwitch.textContent = '☀️';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'mocha');
+                localStorage.setItem('theme', 'mocha');
+                themeSwitch.textContent = '🌙';
+            }
+        });
+    </script>
 </body>
 </html>
