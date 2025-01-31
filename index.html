@@ -12,21 +12,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji" rel="stylesheet">
     <style>
-        /* Catppuccin Palette */
+        /* Material Design Palette */
         :root {
-            --bg-color: #1e1e2e; /* Mocha background */
-            --text-color: #cdd6f4; /* Mocha text */
-            --card-bg-color: #313244; /* Mocha surface */
-            --accent-color: #f38ba8; /* Mocha red */
-            --overlay-color: #11111b; /* Dark theme overlay color */
-            --overlay-opacity: 0.7; /* Overlay opacity */
+            --bg-color: #121212; /* Dark background */
+            --text-color: #ffffff; /* Light text */
+            --card-bg-color: #1e1e1e; /* Card background */
+            --accent-color: #bb86fc; /* Material Purple */
+            --overlay-color: rgb(0, 0, 0); /* Overlay color */
+            --overlay-opacity: 0.6; /* Overlay opacity */
         }
-        [data-theme="latte"] {
-            --bg-color: #eff1f5; /* Latte background */
-            --text-color: #4c4f69; /* Latte text */
-            --card-bg-color: #e6e9ef; /* Latte surface */
-            --accent-color: #d20f39; /* Latte red */
-            --overlay-color: #dce0e8; /* Light theme overlay color */
+        [data-theme="light"] {
+            --bg-color: #ffffff; /* Light background */
+            --text-color: #000000; /* Dark text */
+            --card-bg-color: #f5f5f5; /* Light card background */
+            --accent-color: #6200ee; /* Material Deep Purple */
+            --overlay-color: rgb(255, 255, 255); /* Light overlay */
         }
         body {
             font-family: 'Roboto', sans-serif;
@@ -41,45 +41,46 @@
             color: var(--text-color);
         }
         strong {
-            font-size: 4.9rem;
+            font-size: 3.3rem; /* Phone size */
         }
         a {
             text-decoration: none;
-            font-size: 2.4rem;
+            font-size: 2.2rem; /* Phone size */
         }
         p {
-            font-size: 1.1rem;
+            font-size: 1.1rem; /* Phone size */
         }
         .card {
             background-color: var(--card-bg-color);
-            width: 100%; /* Make the card take up 100% of its container */
-            margin: auto; /* Center the card horizontally */
-            overflow: hidden; /* Ensure no overflow from the image */
-            position: relative; /* Needed for absolute positioning of overlay */
-            height: auto; /* Allow height to adjust dynamically */
-            border-radius: 20px; /* Keep the rounder look */
+            width: 100%; /* Full width on small screens */
+            margin: auto;
+            overflow: hidden;
+            position: relative;
+            height: auto;
+            border-radius: 16px; /* Rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06); /* Material shadow */
         }
         .card-img {
-            width: 100%; /* Make the image span the full width of the card */
-            height: auto; /* Allow height to adjust based on image aspect ratio */
-            object-fit: contain; /* Ensure the entire image is visible */
-            filter: brightness(var(--image-brightness)); /* Adjust brightness based on theme */
-            transition: filter 0.3s ease; /* Smooth transition for brightness changes */
+            width: 100%;
+            height: auto;
+            object-fit: cover; /* Ensure image covers the area */
+            filter: brightness(var(--image-brightness));
+            transition: filter 0.3s ease;
         }
         .card::before {
-            content: ''; /* Required for pseudo-element */
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: var(--overlay-color); /* Overlay color */
-            opacity: var(--overlay-opacity); /* Overlay opacity */
-            z-index: 1; /* Place overlay above the image */
-            pointer-events: none; /* Ensure the overlay doesn't block interactions */
+            background-color: var(--overlay-color);
+            opacity: var(--overlay-opacity);
+            z-index: 1;
+            pointer-events: none;
         }
         .card-img-overlay {
-            position: absolute; /* Position the overlay absolutely within the card */
+            position: absolute;
             top: 0;
             left: 0;
             right: 0;
@@ -88,22 +89,41 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 2; /* Place text above the overlay */
+            z-index: 2;
         }
-        @media (min-width: 1200px) {
+
+        /* Responsive Font Sizes */
+        @media (min-width: 768px) { /* Laptop */
             strong {
-                font-size: 6.48rem; /* Larger font size for larger screens */
+                font-size: 4.6rem;
             }
             p {
-                font-size: 1.44rem;
+                font-size: 1.5rem;
             }
             a {
-                font-size: 3.24rem;
-            }
-            .card {
-                height: auto; /* Allow height to adjust dynamically */
+                font-size: 3rem;
             }
         }
+        @media (min-width: 1200px) { /* Desktop */
+            strong {
+                font-size: 6rem;
+            }
+            p {
+                font-size: 2rem;
+            }
+            a {
+                font-size: 4rem;
+            }
+        }
+
+        /* Uniform spacing for icons */
+        .icon-spacing {
+            margin-right: 1rem;
+        }
+        .icon-spacing:last-child {
+            margin-right: 0;
+        }
+
         /* Theme switch button styles */
         .theme-switch {
             position: fixed;
@@ -115,33 +135,36 @@
             color: var(--text-color);
             border: none;
             padding: 0.5rem 1rem;
-            border-radius: 20px; /* Keep the rounder look */
+            border-radius: 20px;
             font-size: 1.2rem;
             transition: background-color 0.3s ease, color 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
         }
         .theme-switch:hover {
             opacity: 0.7;
         }
     </style>
 </head>
-<body>
+<body data-theme="dark"> <!-- Default to dark theme -->
     <!-- Theme Switch Button -->
     <button class="theme-switch" id="themeSwitch">🌙</button>
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
-        <div class="row justify-content-center align-items-center">
-            <div class="col-12">
+        <div class="row justify-content-center align-items-center w-100">
+            <!-- Card Column - Responsive Width -->
+            <div class="col-12 col-md-8 col-lg-6">
                 <div class="card text-center">
                     <img src="image.webp" class="card-img" alt="Shiro">
                     <div class="card-img-overlay d-flex flex-column justify-content-center">
                         <h1 class="card-title"><strong>Shiro</strong></h1>
                         <p class="card-text emoji">🐱 Glutton cat 🍕 Pizza lover <br> 💻 AI Specialist & bioengineer <br> 🎮 Gamer 🌸 Anime enjoyer <br> 😋 Always hungry 🇺🇸 🇨🇴</p>
                         <p>
-                            <a href="https://discordapp.com/users/furshirome" aria-label="Talk me on Discord"><i class="bi bi-discord"></i> </a>
-                            <a href="https://www.facebook.com/profile.php?id=61571484617229&mibextid=ZbWKwL" aria-label="Talk me on Facebook"><i class="bi bi-facebook"></i> </a>
-                            <a href="https://www.instagram.com/furshiro/" aria-label="Follow me on Instagram"><i class="bi bi-instagram"></i> </a>
-                            <a href="https://line.me/ti/p/iTlebHiBCU" aria-label="Talk me on LINE"><i class="bi bi-line"></i> </a>
-                            <a href="https://telegram.me/FurShiro" aria-label="Talk me on Telegram"><i class="bi bi-telegram"></i> </a>
-                            <a href="https://truthsocial.com/@furshiro" aria-label="Follow me on TruthSocial">
+                            <!-- Icons with uniform spacing -->
+                            <a href="https://discordapp.com/users/furshirome" aria-label="Talk me on Discord" class="icon-spacing"><i class="bi bi-discord"></i></a>
+                            <a href="https://www.facebook.com/profile.php?id=61571484617229&mibextid=ZbWKwL" aria-label="Talk me on Facebook" class="icon-spacing"><i class="bi bi-facebook"></i></a>
+                            <a href="https://www.instagram.com/furshiro/" aria-label="Follow me on Instagram" class="icon-spacing"><i class="bi bi-instagram"></i></a>
+                            <a href="https://line.me/ti/p/iTlebHiBCU" aria-label="Talk me on LINE" class="icon-spacing"><i class="bi bi-line"></i></a>
+                            <a href="https://telegram.me/FurShiro" aria-label="Talk me on Telegram" class="icon-spacing"><i class="bi bi-telegram"></i></a>
+                            <a href="https://truthsocial.com/@furshiro" aria-label="Follow me on TruthSocial" class="icon-spacing">
                                 <svg class="bi" width="1.25em" height="1.25em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" style="vertical-align: middle;">
                                     <g transform="scale(0.09) translate(-20, 4)">
                                         <path d="M 267 156.3 L 197.164062 156.3 L 197.164062 213.390625 L 267 213.390625 Z"/>
@@ -150,9 +173,9 @@
                                     </g>
                                 </svg>
                             </a>
-                            <a href="https://www.threads.net/@furshiro" aria-label="Follow me on Threads"><i class="bi bi-threads"></i> </a>
-                            <a href="https://wa.me/qr/NO2EWCQBN2LWI1" aria-label="Talk me on WhatsApp"><i class="bi bi-whatsapp"></i> </a>
-                            <a href="https://x.com/FurShiro" aria-label="Follow me on Twitter/X"><i class="bi bi-twitter-x"></i></a>
+                            <a href="https://www.threads.net/@furshiro" aria-label="Follow me on Threads" class="icon-spacing"><i class="bi bi-threads"></i></a>
+                            <a href="https://wa.me/qr/NO2EWCQBN2LWI1" aria-label="Talk me on WhatsApp" class="icon-spacing"><i class="bi bi-whatsapp"></i></a>
+                            <a href="https://x.com/FurShiro" aria-label="Follow me on Twitter/X" class="icon-spacing"><i class="bi bi-twitter-x"></i></a>
                         </p>
                     </div>
                 </div>
@@ -162,27 +185,25 @@
     <script>
         // Theme Switch Logic
         const themeSwitch = document.getElementById('themeSwitch');
-
-        // Check if a theme is saved in localStorage, default to 'mocha' if not set
-        const currentTheme = localStorage.getItem('theme') || 'mocha'; // Default to 'mocha'
-        if (currentTheme === 'latte') {
-            document.documentElement.setAttribute('data-theme', 'latte');
+        // Check if a theme is saved in localStorage, default to 'dark' if not set
+        const currentTheme = localStorage.getItem('theme') || 'dark'; // Default to 'dark'
+        if (currentTheme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
             themeSwitch.textContent = '☀️'; // Light mode icon
         } else {
-            document.documentElement.setAttribute('data-theme', 'mocha');
+            document.documentElement.setAttribute('data-theme', 'dark');
             themeSwitch.textContent = '🌙'; // Dark mode icon
         }
-
         // Toggle theme on button click
         themeSwitch.addEventListener('click', () => {
             const currentTheme = document.documentElement.getAttribute('data-theme');
-            if (currentTheme === 'mocha') {
-                document.documentElement.setAttribute('data-theme', 'latte');
-                localStorage.setItem('theme', 'latte');
+            if (currentTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
                 themeSwitch.textContent = '☀️';
             } else {
-                document.documentElement.setAttribute('data-theme', 'mocha');
-                localStorage.setItem('theme', 'mocha');
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
                 themeSwitch.textContent = '🌙';
             }
         });
