@@ -24,3 +24,18 @@ themeSwitch.addEventListener('click', () => {
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme); // Switch to the new theme
 });
+
+// Scroll Message
+
+document.addEventListener("DOMContentLoaded", function () {
+    const scrollMessage = document.querySelector('.scroll-message');
+
+    window.addEventListener('scroll', function () {
+        // Check if the user has scrolled down
+        if (window.scrollY > 50) {  // Adjust the scroll threshold as needed
+            scrollMessage.classList.add('fade-out');
+        } else {
+            scrollMessage.classList.remove('fade-out');
+        }
+    });
+});

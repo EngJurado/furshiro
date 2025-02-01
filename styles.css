@@ -3,7 +3,6 @@
     --bg-color: #121212; /* Dark background */
     --text-color: #ffffff; /* Light text */
     --card-bg-color: #1e1e1e; /* Card background */
-    --accent-color: #bb86fc; /* Material Purple */
     --overlay-color: rgb(0, 0, 0); /* Overlay color */
     --overlay-opacity: 0.5; /* Overlay opacity */
     --theme-switch-bg: #1e1e1e; /* Dark mode switch background */
@@ -12,12 +11,13 @@
     --button-bg: #121212; /* Dark mode button background */
     --button-text: #ffffff; /* Dark mode button text */
     --button-hover-bg: #333333; /* Dark mode button hover background */
+    --scroll-message-bg: rgba(0, 0, 0, 0.7); /* Scroll message background */
+    --scroll-message-text: #ffffff; /* Scroll message text */
 }
 [data-theme="light"] {
     --bg-color: #ffffff; /* Light background */
     --text-color: #000000; /* Dark text */
     --card-bg-color: #f0f0f0; /* Light card background */
-    --accent-color: #6200ee; /* Material Deep Purple */
     --overlay-color: rgb(255, 255, 255); /* Light overlay */
     --theme-switch-bg: #f0f0f0; /* Light mode switch background */
     --theme-switch-text: #000000; /* Light mode switch text */
@@ -25,6 +25,8 @@
     --button-bg: #ffffff; /* Light mode button background */
     --button-text: #000000; /* Light mode button text */
     --button-hover-bg: #e0e0e0; /* Light mode button hover background */
+    --scroll-message-bg: rgba(224, 224, 224, 0.7); /* Scroll message background */
+    --scroll-message-text: #000000; /* Scroll message text */
 }
 body {
     font-family: 'Roboto', sans-serif;
@@ -153,4 +155,25 @@ p {
 
 .custom-btn:hover {
     background-color: var(--button-hover-bg); /* Use CSS variable for hover background */
+}
+
+/* Scroll Message */
+
+.scroll-message {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--scroll-message-bg);
+    color: var(--scroll-message-text);
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 1000;
+}
+
+.scroll-message.fade-out {
+    opacity: 0;
 }
