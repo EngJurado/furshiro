@@ -167,8 +167,9 @@ p {
     background-color: var(--scroll-message-bg);
     color: var(--scroll-message-text);
     padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 16px;
+    border-radius: 16px;
+    font-size: 1rem;
+    text-align: center;
     opacity: 1;
     transition: opacity 0.5s ease-in-out;
     z-index: 1000;
