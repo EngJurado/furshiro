@@ -11,8 +11,14 @@
     --button-bg: #121212; /* Dark mode button background */
     --button-text: #ffffff; /* Dark mode button text */
     --button-hover-bg: #333333; /* Dark mode button hover background */
+    /* scroll message */
     --scroll-message-bg: rgba(0, 0, 0, 0.7); /* Scroll message background */
     --scroll-message-text: #ffffff; /* Scroll message text */
+    /* Backgound */
+    --s: 75px; /* control the size */
+    --c1: #121212;
+    --c2: #1e1e1e;
+    --c3: #333333;
 }
 [data-theme="light"] {
     --bg-color: #ffffff; /* Light background */
@@ -25,20 +31,29 @@
     --button-bg: #ffffff; /* Light mode button background */
     --button-text: #000000; /* Light mode button text */
     --button-hover-bg: #e0e0e0; /* Light mode button hover background */
+    /* scroll message */
     --scroll-message-bg: rgba(224, 224, 224, 0.7); /* Scroll message background */
     --scroll-message-text: #000000; /* Scroll message text */
+    /* Backgound */
+    --s: 75px; /* control the size*/
+    --c1: #e0e0e0;
+    --c2: #f0f0f0;
+    --c3: #ffffff;
 }
-body {
-    font-family: 'Roboto', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    transition: background-color 0.3s ease, color 0.3s ease;
+/* Backgound */
+body {   
+    background:
+        repeating-conic-gradient(from 30deg,#0000 0 120deg,var(--c3) 0 50%) 
+        calc(var(--s)/2) calc(var(--s)*tan(30deg)/2),
+        repeating-conic-gradient(from 30deg,var(--c1) 0 60deg,var(--c2) 0 120deg,var(--c3) 0 50%);
+    background-size: var(--s) calc(var(--s)*tan(30deg));
 }
 .emoji {
     font-family: 'Noto Color Emoji', sans-serif;
 }
 p, a, strong {
     color: var(--text-color);
+    font-family: 'Roboto', sans-serif;
 }
 strong {
     font-size: 3.3rem; /* Phone size */
@@ -177,4 +192,47 @@ p {
 
 .scroll-message.fade-out {
     opacity: 0;
+}
+
+/* Footer Styles */
+footer {
+    background-color: var(--card-bg-color); /* Match card background for consistency */
+    color: var(--text-color);
+    padding: 1rem; /* Reduced padding for a more compact look */
+    text-align: center; /* Center-align text */
+    font-size: 0.8rem; /* Slightly smaller font size for footer */
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Subtle divider */
+    margin-top: 1.5rem; /* Reduced spacing between main content and footer */
+}
+
+footer p {
+    margin: 0.25rem 0; /* Reduced spacing between paragraphs */
+}
+
+/* Icon Styling */
+footer .icon-spacing {
+    margin-right: 0.5rem; /* Reduced spacing between icons */
+    font-size: 1.3rem; /* Slightly smaller icons for better fit */
+    color: var(--button-text); /* Use button text color for icons */
+    transition: color 0.3s ease;
+}
+
+footer .icon-spacing:last-child {
+    margin-right: 0; /* Remove margin from the last icon */
+}
+
+footer .icon-spacing:hover {
+    color: var(--button-hover-bg); /* Highlight icons on hover */
+}
+
+/* Responsive Footer */
+@media (min-width: 768px) {
+    footer {
+        font-size: 0.9rem; /* Slightly larger font on larger screens */
+    }
+
+    footer .icon-spacing {
+        font-size: 1.5rem; /* Slightly smaller icons on larger screens */
+        margin-right: 0.75rem; /* Slightly more spacing for larger screens */
+    }
 }
