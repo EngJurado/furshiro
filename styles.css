@@ -62,6 +62,9 @@ body {
 .social {
     padding: 0.2rem;
     margin: 0rem;}
+.social:hover {
+    zoom: 1.2;
+}
 p, a, strong {
     color: var(--text-color);
     font-family: 'Roboto', sans-serif;
