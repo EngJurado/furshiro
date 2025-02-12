@@ -71,16 +71,16 @@ p, a, strong {
 }
 
 strong {
-    font-size: 3.3rem; /* Phone size */
+    font-size: 3.6rem; /* Phone size */
 }
 
 a {
     text-decoration: none;
-    font-size: 2rem; /* Phone size */
+    font-size: 2.4rem; /* Phone size */
 }
 
 p {
-    font-size: 1.1rem; /* Phone size */
+    font-size: 1.2rem; /* Phone size */
 }
 
 /* 
