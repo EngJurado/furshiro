@@ -1,0 +1,78 @@
+---
+interface Props {
+  title?: string;
+}
+
+const { title = "Hideki" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Noto Color Emoji -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&family=Noto+Sans:wght@400&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    
+    <!-- Dark Theme Styles -->
+    <style>
+      :root {
+        --text-color: #ffffff;
+        --card-bg: #2d2d2d;
+      }
+
+      html {
+        --s: 22px; /* control the size*/
+        --c1: #0a0a0a;
+        --c2: #000000;
+        
+        --_c: var(--c1) 25%,#0000 0;
+        --_g1: conic-gradient(at 62.5% 12.5%,var(--_c));
+        --_g2: conic-gradient(at 87.5% 62.5%,var(--_c));
+        --_g3: conic-gradient(at 25%   12.5%,var(--_c));
+        background:
+          var(--_g1) calc( var(--s)/-8) calc(var(--s)/2),var(--_g1) calc(-3*var(--s)/8) calc(var(--s)/4),
+          var(--_g2) calc(3*var(--s)/8) calc(var(--s)/4),var(--_g2) calc(  var(--s)/-8) 0,
+          var(--_g3) 0 calc(var(--s)/-4),var(--_g3) calc(var(--s)/-4) 0,
+          conic-gradient(at 87.5% 87.5%,var(--_c)) calc(var(--s)/8) 0
+          var(--c2);
+        background-size: var(--s) var(--s);
+        min-height: 100vh;
+      }
+
+      body {
+        background-color: transparent;
+        color: var(--text-color);
+        font-family: 'Roboto','Noto Color Emoji', 'sans-serif';
+      }
+
+      .card {
+        background-color: var(--card-bg);
+      }
+
+      .bg-dark {
+        background-color: #1a1a1a !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <slot />
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

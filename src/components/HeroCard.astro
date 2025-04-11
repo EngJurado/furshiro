@@ -1,0 +1,156 @@
+---
+interface Props {
+  title: string;
+  text: string;
+  socialLinks: {
+    icon: string;
+    url: string;
+    label: string;
+  }[];
+}
+
+const { title, text, socialLinks } = Astro.props;
+---
+
+<div class="min-vh-100 d-flex align-items-center justify-content-center">
+  <div class="col-12 col-md-10">
+    <div class="card text-white bg-transparent border-0 position-relative rounded-3 rounded-md-4 overflow-hidden">
+      <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-75"></div>
+      <div class="card-body text-center p-5 d-flex flex-column align-items-center justify-content-center">
+        <h2 class="card-title fw-bold mb-4">{title.trim()}</h2>
+        <p class="card-text lead mb-4">{text}</p>
+        
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+          {socialLinks.map((link, index) => (
+            <a 
+              href={link.url} 
+              class="text-white text-decoration-none" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label={link.label}
+            >
+              <i class={`fab ${link.icon}`} aria-hidden="true"></i>
+              <span class="visually-hidden">&nbsp;</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .card {
+    position: relative;
+    background-image: url("/assets/image.webp");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 1rem !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+    min-height: 600px;
+    z-index: 1;
+    background-clip: padding-box;
+    font-family: 'Roboto','Noto Color Emoji', 'sans-serif';
+  }
+
+  .card-body {
+    padding: 2rem;
+    position: relative;
+    z-index: 2;
+    background-color: transparent;
+    height: 100%;
+  }
+
+  .card-title {
+    line-height: 1.2;
+    color: #fff;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+    margin-bottom: 1.875rem;
+  }
+
+  .card-text {
+    color: #fff;
+    text-shadow: 1.5px 1.5px 3px rgba(0,0,0,0.5);
+    margin-bottom: 1.875rem;
+  }
+
+  /* Extra Small Devices (Mobile Phones) */
+  @media (max-width: 575.98px) {
+    .card-title {
+      font-size: 3rem !important;
+    }
+
+    .card-text {
+      font-size: 1.5rem !important;
+    }
+
+    .fab {
+      font-size: 2rem !important;
+    }
+  }
+
+  /* Small Devices (Tablets) */
+  @media (min-width: 576px) and (max-width: 767.98px) {
+    .card-title {
+      font-size: 4rem !important;
+    }
+
+    .card-text {
+      font-size: 1.75rem !important;
+    }
+
+    .fab {
+      font-size: 2.5rem !important;
+    }
+  }
+
+  /* Medium Devices (Small Laptops) */
+  @media (min-width: 768px) and (max-width: 991.98px) {
+    .card-title {
+      font-size: 5rem !important;
+    }
+
+    .card-text {
+      font-size: 2.25rem !important;
+    }
+
+    .fab {
+      font-size: 3rem !important;
+    }
+  }
+
+  /* Large Devices (Laptops) */
+  @media (min-width: 992px) and (max-width: 1199.98px) {
+    .card-title {
+      font-size: 6rem !important;
+    }
+
+    .card-text {
+      font-size: 2.5rem !important;
+    }
+
+    .fab {
+      font-size: 4rem !important;
+    }
+  }
+
+  /* Extra Large Devices (Large Laptops & Desktops) */
+  @media (min-width: 1200px) {
+    .card {
+      border-radius: 2rem !important;
+    }
+
+    .card-title {
+      font-size: 7rem !important;
+    }
+
+    .card-text {
+      font-size: 3rem !important;
+    }
+
+    .fab {
+      font-size: 5rem !important;
+    }
+  }
+</style>
