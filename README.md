@@ -27,8 +27,8 @@ A modern, responsive Astro website featuring a gallery and hero section with sel
 - **Bootstrap** v5.3.5 - CSS framework (self-hosted)
 - **Font Awesome** v6.7.2 - Icons (self-hosted)
 - **@fontsource/roboto** v5.2.5 - Roboto font family (self-hosted)
-- **@fontsource/noto-sans** v5.2.7 - Noto Sans font (self-hosted)
-- **@fontsource/noto-color-emoji** v5.2.7 - Emoji font support (self-hosted)
+- **@fontsource/noto-sans** v5.2.7 - Noto Sans font
+- **@fontsource/noto-color-emoji** v5.2.7 - Emoji font support
 
 ## ✨ Features
 
