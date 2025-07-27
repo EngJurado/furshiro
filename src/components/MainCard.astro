@@ -1,0 +1,69 @@
+---
+// components/MainCard.astro
+import Icon    from "./Icon.jsx";
+import Twemoji from "./Twemoji.jsx";
+
+// Font-Awesome icons
+import {
+  faDiscord, faFacebook, faInstagram, faLine,
+  faTelegram, faThreads, faWhatsapp, faXTwitter
+} from "@fortawesome/free-brands-svg-icons";
+import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
+
+/** Centralised social-link metadata */
+const socialLinks = [
+  { platform: "discord",   icon: faDiscord,  url: "https://discordapp.com/users/hidekicatto", label: "Talk to me on Discord" },
+  { platform: "facebook",  icon: faFacebook, url: "https://www.facebook.com/HidekiCatto/",   label: "Talk to me on Facebook" },
+  { platform: "instagram", icon: faInstagram,url: "https://www.instagram.com/hidekicatto",   label: "Follow me on Instagram" },
+  { platform: "line",      icon: faLine,     url: "https://line.me/ti/p/iTlebHiBCU",         label: "Talk to me on LINE" },
+  { platform: "telegram",  icon: faTelegram, url: "https://telegram.me/HidekiCatto",         label: "Talk to me on Telegram" },
+  { platform: "threads",   icon: faThreads,  url: "https://www.threads.net/@hidekicatto",    label: "Follow me on Threads" },
+  { platform: "whatsapp",  icon: faWhatsapp, url: "https://wa.me/qr/NO2EWCQBN2LWI1",         label: "Talk to me on WhatsApp" },
+  { platform: "twitter",   icon: faXTwitter, url: "https://x.com/HidekiCatto",               label: "Follow me on Twitter/X" }
+];
+---
+
+<section id="intro" class="flex flex-col items-center justify-center min-h-screen px-4 py-12">
+  <div class="rounded-[2rem] overflow-hidden bg-black/50 backdrop-blur-lg shadow-2xl w-full max-w-md md:max-w-2xl lg:max-w-3xl p-8 md:p-12 text-white">
+    <h1 class="text-4xl md:text-6xl font-extrabold mb-6 text-center">Hideki</h1>
+
+    <p class="text-center mb-8 text-lg md:text-2xl leading-relaxed">
+      <Twemoji client:load>
+        😼 Glutton cat 🍕 Pizza lover 💻 AI Specialist &amp; bioengineer 🎮 Gamer 🌸 Anime enjoyer 😋 Always hungry 🇺🇸 🇨🇴
+      </Twemoji>
+    </p>
+
+    <!-- Social-media icon bar -->
+    <div class="flex justify-center flex-wrap gap-3 sm:gap-4 md:gap-6 text-2xl">
+      {
+        socialLinks.map(({ platform, icon, url, label }) => {
+          const hoverColor = {
+            discord:  "hover:text-[#5865F2]",
+            facebook: "hover:text-[#1877F2]",
+            telegram: "hover:text-[#26A5E4]",
+            instagram:"hover:text-[#C13584]",
+            line:     "hover:text-[#00C300]",
+            whatsapp: "hover:text-[#25D366]",
+            threads:  "hover:text-gray-400",
+            twitter:  "hover:text-gray-400"
+          }[platform] ?? "hover:text-white";
+
+          return (
+            <a href={url}
+               aria-label={label}
+               target="_blank"
+               rel="noopener noreferrer"
+               class={`transition text-white ${hoverColor}`}>
+              <Icon icon={icon}/>
+            </a>
+          );
+        })
+      }
+    </div>
+  </div>
+
+  <!-- Bouncing arrow that jumps straight to #gallery -->
+  <a href="#gallery" class="mt-10 animate-bounce text-white text-3xl">
+    <Icon icon={faArrowDown}/>
+  </a>
+</section>

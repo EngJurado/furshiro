@@ -1,103 +1,34 @@
+<!-- index.astro – lightweight page that stitches MainCard + Gallery -->
 ---
-import MainLayout from "../layouts/MainLayout.astro";
-import HeroCard from "../components/HeroCard.astro";
-import Gallery from "../components/Gallery.astro";
-import ScrollPrompt from '../components/ScrollPrompt.astro';
+import "../utils/fontawesome.js";
+import BaseLayout from "../layouts/BaseLayout.astro";
 
-const socialLinks = [
-  { icon: 'fa-brands fa-discord', url: 'https://discordapp.com/users/hidekicatto', label: 'Talk to me on Discord' },
-  { icon: 'fa-brands fa-facebook', url: 'https://www.facebook.com/HidekiCatto/', label: 'Talk to me on Facebook' },
-  { icon: 'fa-brands fa-instagram', url: 'https://www.instagram.com/hidekicatto', label: 'Follow me on Instagram' },
-  { icon: 'fa-brands fa-line', url: 'https://line.me/ti/p/iTlebHiBCU', label: 'Talk to me on LINE' },
-  { icon: 'fa-brands fa-telegram', url: 'https://telegram.me/HidekiCatto', label: 'Talk to me on Telegram' },
-  { icon: 'fa-brands fa-threads', url: 'https://www.threads.net/@hidekicatto', label: 'Follow me on Threads' },
-  { icon: 'fa-brands fa-whatsapp', url: 'https://wa.me/qr/NO2EWCQBN2LWI1', label: 'Talk to me on WhatsApp' },
-  { icon: 'fa-brands fa-x-twitter', url: 'https://x.com/HidekiCatto', label: 'Follow me on Twitter/X' }
+import MainCard from "../components/MainCard.astro";
+import Gallery  from "../components/Gallery.astro";
+
+/** Seed artwork list (replace with CMS / filesystem in prod) */
+const drawings = [
+  { src: "/drawings/1.webp",  date: "2024-08-30", artist: "nyu" },
+  { src: "/drawings/2.webp",  date: "2024-09-22", artist: "nyu" },
+  { src: "/drawings/3.webp",  date: "2024-10-13", artist: "nyu" },
+  { src: "/drawings/4.webp",  date: "2024-10-21", artist: "nyu" },
+  { src: "/drawings/5.webp",  date: "2024-11-02", artist: "Alphie" },
+  { src: "/drawings/6.webp",  date: "2024-11-16", artist: "nyu" },
+  { src: "/drawings/7.webp",  date: "2024-12-15", artist: "RociDrawings97" },
+  { src: "/drawings/8.webp",  date: "2025-02-18", artist: "RociDrawings97" },
+  { src: "/drawings/9.webp",  date: "2025-02-23", artist: "nyu" },
+  { src: "/drawings/10.webp", date: "2025-06-01", artist: "RociDrawings97" },
+  { src: "/drawings/11.webp", date: "2025-07-01", artist: "nyu" },
+  { src: "/drawings/12.webp", date: "2025-07-09", artist: "RociDrawings97" }
 ];
 
-const galleryImages = [
-  {
-    url: "/assets/gallery/10.webp",
-    title: "RociDrawings97",
-    artist: "RociDrawings97",
-    artistUrl: "https://www.deviantart.com/rocidrawings97",
-    date: "June 1, 2025"
-  },
-  {
-    url: "/assets/gallery/9.webp",
-    title: "nyu",
-    artist: "nyu",
-    artistUrl: "https://x.com/nyukuyo0_uwu",
-    date: "February 23, 2025"
-  },
-  {
-    url: "/assets/gallery/8.webp",
-    title: "RociDrawings97",
-    artist: "RociDrawings97",
-    artistUrl: "https://www.deviantart.com/rocidrawings97",
-    date: "February 18, 2025"
-  },
-  {
-    url: "/assets/gallery/7.webp",
-    title: "RociDrawings97",
-    artist: "RociDrawings97",
-    artistUrl: "https://www.deviantart.com/rocidrawings97",
-    date: "December 15, 2024"
-  },
-  {
-    url: "/assets/gallery/6.webp",
-    title: "nyu",
-    artist: "nyu",
-    artistUrl: "https://x.com/nyukuyo0_uwu",
-    date: "November 16, 2024"
-  },
-  {
-    url: "/assets/gallery/5.webp",
-    title: "Alphie",
-    artist: "Alphie",
-    artistUrl: "https://x.com/DragonInAScarf",
-    date: "November 2, 2024"
-  },
-  {
-    url: "/assets/gallery/4.webp",
-    title: "nyu",
-    artist: "nyu",
-    artistUrl: "https://x.com/nyukuyo0_uwu",
-    date: "October 21, 2024"
-  },
-  {
-    url: "/assets/gallery/3.webp",
-    title: "nyu",
-    artist: "nyu",
-    artistUrl: "https://x.com/nyukuyo0_uwu",
-    date: "October 13, 2024"
-  },
-  {
-    url: "/assets/gallery/2.webp",
-    title: "nyu",
-    artist: "nyu",
-    artistUrl: "https://x.com/nyukuyo0_uwu",
-    date: "September 22, 2024"
-  },
-  {
-    url: "/assets/gallery/1.webp",
-    title: "nyu",
-    artist: "nyu",
-    artistUrl: "https://x.com/nyukuyo0_uwu",
-    date: "August 30, 2024"
-  }
-];
+// newest → oldest
+const sortedDrawings = [...drawings].sort((a, b) => new Date(b.date) - new Date(a.date));
 ---
 
-<MainLayout>
-  <div class="min-vh-100 d-flex align-items-center justify-content-center">
-    <HeroCard
-      title="Hideki"
-      text="🐱 Glutton cat 🍕 Pizza lover 💻 AI Specialist & bioengineer 🎮 Gamer 🌸 Anime enjoyer 😋 Always hungry 🇺🇸 🇨🇴"
-      socialLinks={socialLinks}
-    />
-  </div>
-
-  <ScrollPrompt />
-  <Gallery photos={galleryImages} />
-</MainLayout>
+<BaseLayout>
+  <main class="bg-cover bg-center" style="background-image:url('/images/card-background.webp')">
+    <MainCard />
+    <Gallery drawings={sortedDrawings}/>
+  </main>
+</BaseLayout>

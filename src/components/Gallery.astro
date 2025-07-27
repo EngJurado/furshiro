@@ -1,168 +1,106 @@
 ---
-import { Image } from 'astro:assets';
+// components/Gallery.astro
+import Modal from "./Modal.jsx";
 
-interface Props {
-  photos: Array<{
-    url: string;
-    title: string;
-    artist: string;
-    artistUrl: string;
-    date: string;
-  }>;
-}
-
-const { photos } = Astro.props;
+/** Props
+ * @prop {Array<{src:string,date:string,artist:string}>} drawings – already sorted newest→oldest
+ */
+const { drawings } = Astro.props;
 ---
 
-<div class="py-5">
-  <div class="container">
-    <div class="text-center mb-5">
-      <h2 class="gallery-title fw-bold">Gallery</h2>
-    </div>
+<section id="gallery" class="min-h-screen bg-transparent text-white p-4">
+  <h2 class="text-3xl font-bold mb-6 text-center">🎨 Gallery</h2>
 
-    <div class="row g-4">
-      {photos.map((photo, index) => (
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-          <div
-            class="gallery-item"
-            data-bs-toggle="modal"
-            data-bs-target={`#imageModal-${index}`}
-          >
-            <Image 
-              src={photo.url}
-              alt={`Gallery item ${index + 1}`}
-              class="img-fluid rounded"
-              loading="lazy"
-              width={300}
-              height={300}
-            />
-            <div class="mt-2 d-flex justify-content-between align-items-center">
-              <a href={photo.artistUrl} target="_blank" rel="noopener noreferrer" class="text-white text-decoration-none">
-                {photo.artist}
-              </a>
-              <div class="text-white small">{photo.date}</div>
-            </div>
-          </div>
-
-          <!-- Fullscreen Modal -->
-          <div
-            class="modal fade"
-            id={`imageModal-${index}`}
-            tabindex="-1"
-          >
-            <div class="modal-dialog modal-fullscreen">
-              <div
-                class="modal-content border-0 bg-transparent p-4 d-flex justify-content-center align-items-center"
-                data-bs-dismiss="modal"
-              >
-                <Image 
-                  src={photo.url}
-                  alt={`Gallery item ${index + 1}`}
-                  class="img-fluid modal-image"
-                  loading="eager"
-                  fetchpriority="high"
-                  width={1920}
-                  height={1080}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
+  <!-- Desktop gets 95 vw container; smaller screens stay full-width -->
+  <div id="photos-grid" class="flex flex-wrap gap-2 md:gap-4 w-full lg:w-[95vw] mx-auto">
+    {
+      drawings.map((art, i) => (
+        <img
+          src={art.src}
+          alt={`Art by ${art.artist}`}
+          class="rounded-lg cursor-pointer object-cover"
+          loading="lazy"
+          onclick={`window.openModal(${i})`}/>
+      ))
+    }
   </div>
-</div>
 
-<!-- Updated client-side script -->
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.modal').forEach((modal, index) => {
-      // Fixed typo: 'moldal' to 'modal'
-      const bsModal = new bootstrap.Modal(modal, { focus: false });
-      const img = modal.querySelector('.modal-image');
-      const trigger = document.querySelector(`[data-bs-target="#${modal.id}"]`);
+  <!-- Lightbox / modal -->
+  <Modal client:load drawings={drawings}/>
+</section>
 
-      // Close modal on image click
-      img.addEventListener('click', () => {
-        if (bsModal) {
-          modal.blur();
-          bsModal.hide();
-        }
-      });
+<!-- Client-only script that sizes rows Google-Photos-style -->
+<script client:load>
+  /* ---------- layout constants ---------- */
+  const TARGET_ROW_HEIGHT = 200;        // preferred row height in px
+  const TOLERANCE         = 0.25;       // ± fractional deviation allowed
 
-      // Focus image when modal opens
-      modal.addEventListener('shown.bs.modal', () => {
-        modal.removeAttribute('inert');
-        img.focus();
-      });
+  /** computeLayout(imgs, w)
+   * Groups imgs into rows whose summed aspect-ratios fit container width.
+   * @param {HTMLElement[]} imgs  – all <img> children
+   * @param {number}        w     – container width (px)
+   * @returns {HTMLElement[][]}   – array of rows (arrays of <img>)
+   */
+  function computeLayout(imgs, w) {
+    const rows = [];
+    let cur = [], aspect = 0;
 
-      // Clear focus and apply inert before hiding
-      modal.addEventListener('hide.bs.modal', () => {
-        modal.blur();
-        document.activeElement.blur();
-        modal.setAttribute('inert', '');
-        if (trigger) trigger.focus();
+    imgs.forEach(img => {
+      const r = img.naturalWidth / img.naturalHeight;
+      cur.push(img); aspect += r;
+
+      const rowH = w / aspect;
+      if (rowH < TARGET_ROW_HEIGHT * (1 + TOLERANCE)) {
+        rows.push(cur); cur = []; aspect = 0;
+      }
+    });
+    if (cur.length) rows.push(cur);
+    return rows;
+  }
+
+  /** applyLayout(rows, w, gap)
+   * Resizes each img so its row spans the full width without gaps.
+   */
+  function applyLayout(rows, w, gap) {
+    rows.forEach(row => {
+      const aspect = row.reduce((s, img) => s + img.naturalWidth / img.naturalHeight, 0);
+      const rowH   = (w - gap * (row.length - 1)) / aspect;
+
+      // round each width so Σwidths = container width exactly
+      const widths = row.map(img => Math.round(rowH * (img.naturalWidth / img.naturalHeight)));
+      let delta    = (w - gap * (row.length - 1)) - widths.reduce((s, v) => s + v, 0);
+
+      for (let i = 0; delta !== 0; i = (i + 1) % row.length) {
+        widths[i] += delta > 0 ? 1 : -1;
+        delta     += delta > 0 ? -1 : 1;
+      }
+
+      row.forEach((img, i) => {
+        img.style.height = `${rowH}px`;
+        img.style.width  = `${widths[i]}px`;
+        img.style.flex   = `0 0 ${widths[i]}px`;
       });
     });
-  });
+  }
+
+  /** initGrid – bootstrap after thumbs load & on resize */
+  function initGrid() {
+    const container = document.getElementById("photos-grid");
+    if (!container) return;
+
+    const imgs = [...container.querySelectorAll("img")];
+    const ready = () => {
+      const gap = parseFloat(getComputedStyle(container).gap) || 0;
+      applyLayout(computeLayout(imgs, container.clientWidth), container.clientWidth, gap);
+    };
+
+    let loaded = 0;
+    imgs.forEach(img => {
+      if (img.complete && img.naturalWidth) loaded++;
+      else img.addEventListener("load", () => (++loaded === imgs.length) && ready(), { once:true });
+    });
+    if (loaded === imgs.length) ready();
+    window.addEventListener("resize", ready);
+  }
+  initGrid();
 </script>
-
-<style>
-  .gallery-title {
-    line-height: 1.2;
-    color: #fff;
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
-    margin-bottom: 2rem;
-  }
-
-  @media (max-width: 575.98px) { .gallery-title { font-size: 3rem !important; } }
-  @media (min-width: 576px) and (max-width: 767.98px) { .gallery-title { font-size: 4rem !important; } }
-  @media (min-width: 768px) and (max-width: 991.98px) { .gallery-title { font-size: 5rem !important; } }
-  @media (min-width: 992px) and (max-width: 1199.98px) { .gallery-title { font-size: 6rem !important; } }
-  @media (min-width: 1200px) { .gallery-title { font-size: 7rem !important; } }
-
-  .gallery-item {
-    position: relative;
-    overflow: hidden;
-    border-radius: 0.5rem;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  }
-
-  .gallery-item:hover {
-    transform: scale(1.05);
-  }
-
-  .gallery-item img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    aspect-ratio: 1;
-  }
-
-  .modal-content {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.9);
-    padding: 2rem;
-    z-index: 1000;
-  }
-
-  .modal-image {
-    max-width: 90vw;
-    max-height: 90vh;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    border-radius: 1rem;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
-    cursor: pointer;
-  }
-</style>
